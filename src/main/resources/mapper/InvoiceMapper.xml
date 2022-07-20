@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cindy.ocrdemo.mapper.InvoiceMapper">
+
+    <resultMap id="BaseResultMap" type="com.cindy.ocrdemo.pojo.Invoice">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="username" column="username" jdbcType="INTEGER"/>
+            <result property="applyDate" column="apply_date" jdbcType="DATE"/>
+            <result property="imgPath" column="img_path" jdbcType="VARCHAR"/>
+            <result property="imgName" column="img_name" jdbcType="INTEGER"/>
+            <result property="invoiceType" column="invoice_type" jdbcType="TINYINT"/>
+            <result property="invoiceAmount" column="invoice_amount" jdbcType="DECIMAL"/>
+            <result property="note" column="note" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,username,
+        apply_date,img_path,img_name,
+        invoice_type,invoice_amount,note
+    </sql>
+</mapper>

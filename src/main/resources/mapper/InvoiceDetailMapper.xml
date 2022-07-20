@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cindy.ocrdemo.mapper.InvoiceDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.cindy.ocrdemo.pojo.InvoiceDetail">
+            <id property="detailId" column="detail_id" jdbcType="BIGINT"/>
+            <result property="invoicePayerName" column="invoice_payer_name" jdbcType="VARCHAR"/>
+            <result property="invoiceRatePayerId" column="invoice_rate_payer_id" jdbcType="VARCHAR"/>
+            <result property="invoicePayerAddrTell" column="invoice_payer_addr_tell" jdbcType="VARCHAR"/>
+            <result property="invoicePayerBankAccount" column="invoice_payer_bank_account" jdbcType="VARCHAR"/>
+            <result property="cryptographicArea" column="cryptographic_area" jdbcType="VARCHAR"/>
+            <result property="invoiceDaima" column="invoice_daima" jdbcType="VARCHAR"/>
+            <result property="invoiceHaoma" column="invoice_haoma" jdbcType="VARCHAR"/>
+            <result property="invoiceIssueDate" column="invoice_issue_date" jdbcType="VARCHAR"/>
+            <result property="invoiceGoodsList" column="invoice_goods_list" jdbcType="VARCHAR"/>
+            <result property="unitPrice" column="unit_price" jdbcType="VARCHAR"/>
+            <result property="invoicePriceList" column="invoice_price_list" jdbcType="VARCHAR"/>
+            <result property="invoiceTaxRateList" column="invoice_tax_rate_list" jdbcType="VARCHAR"/>
+            <result property="invoiceTaxList" column="invoice_tax_list" jdbcType="VARCHAR"/>
+            <result property="invoiceTotal" column="invoice_total" jdbcType="VARCHAR"/>
+            <result property="invoiceTaxTotal" column="invoice_tax_total" jdbcType="VARCHAR"/>
+            <result property="invoiceTotalCoverTax" column="invoice_total_cover_tax" jdbcType="VARCHAR"/>
+            <result property="invoiceTotalCoverTaxDigits" column="invoice_total_cover_tax_digits" jdbcType="VARCHAR"/>
+            <result property="invoiceSellerName" column="invoice_seller_name" jdbcType="VARCHAR"/>
+            <result property="invoiceSellerId" column="invoice_seller_id" jdbcType="VARCHAR"/>
+            <result property="invoiceSellerAddrTel" column="invoice_seller_addr_tel" jdbcType="VARCHAR"/>
+            <result property="invoiceSellerBankAccount" column="invoice_seller_bank_account" jdbcType="VARCHAR"/>
+            <result property="note" column="note" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        detail_id,invoice_payer_name,invoice_rate_payer_id,
+        invoice_payer_addr_tell,invoice_payer_bank_account,cryptographic_area,
+        invoice_daima,invoice_haoma,invoice_issue_date,
+        invoice_goods_list,unit_price,invoice_price_list,
+        invoice_tax_rate_list,invoice_tax_list,invoice_total,
+        invoice_tax_total,invoice_total_cover_tax,invoice_total_cover_tax_digits,
+        invoice_seller_name,invoice_seller_id,invoice_seller_addr_tel,
+        invoice_seller_bank_account,note
+    </sql>
+</mapper>

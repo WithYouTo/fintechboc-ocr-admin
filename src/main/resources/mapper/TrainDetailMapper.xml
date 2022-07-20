@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cindy.ocrdemo.mapper.TrainDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.cindy.ocrdemo.pojo.TrainDetail">
+            <id property="trainId" column="train_id" jdbcType="BIGINT"/>
+            <result property="ticketNo" column="ticket_no" jdbcType="VARCHAR"/>
+            <result property="ticketCheck" column="ticket_check" jdbcType="VARCHAR"/>
+            <result property="stationFrom" column="station_from" jdbcType="VARCHAR"/>
+            <result property="stationTo" column="station_to" jdbcType="VARCHAR"/>
+            <result property="goDate" column="go_date" jdbcType="DATE"/>
+            <result property="gotime" column="goTime" jdbcType="VARCHAR"/>
+            <result property="train" column="train" jdbcType="VARCHAR"/>
+            <result property="seat" column="seat" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="identity" column="identity" jdbcType="VARCHAR"/>
+            <result property="amount" column="amount" jdbcType="VARCHAR"/>
+            <result property="seatType" column="seat_type" jdbcType="VARCHAR"/>
+            <result property="note" column="note" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        train_id,ticket_no,ticket_check,
+        station_from,station_to,go_date,
+        goTime,train,seat,
+        name,identity,amount,
+        seat_type,note
+    </sql>
+</mapper>

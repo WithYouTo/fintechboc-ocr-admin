@@ -1,0 +1,28 @@
+iflytek:
+  apiKey: 61834e6c6d8cb7d8f05a0b03e0589aeb
+  apiSecret: ZTU3MWI0MjEwZGIyNTQ3ZTAxODhhYzMy
+  appid: 57816252
+  requestInvoiceUrl: https://api.xf-yun.com/v1/private/s824758f1
+  requestTrainUrl: https://api.xf-yun.com/v1/private/s19cfe728
+  requestTaxiUrl: https://api.xf-yun.com/v1/private/sb6db0171
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/boc_fintech_ocr?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  web:
+    resources:
+      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/static/admin/,classpath:/public/,file:${web.upload-path}
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+web:
+  upload-path: D:/data/
+server:
+  port: 8060
