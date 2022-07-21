@@ -36,8 +36,6 @@ public class TrainOcrApi{
     @Value("${iflytek.appid}")
     private  String appid;
 
-    private  String imagePath = "F:\\data\\train_ticket_image_02.jpg";
-
     //解析Json
     private static Gson json = new Gson();
 
@@ -46,7 +44,7 @@ public class TrainOcrApi{
      * @return 返回服务结果
      * @throws Exception 异常
      */
-    public String httpRequest() throws Exception {
+    public String httpRequest(String filePath) throws Exception {
         URL realUrl = new URL(buildRequetUrl());
         URLConnection connection = realUrl.openConnection();
         HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
@@ -56,7 +54,7 @@ public class TrainOcrApi{
         httpURLConnection.setRequestProperty("Content-type","application/json");
 
         OutputStream out = httpURLConnection.getOutputStream();
-        String params = buildParam();
+        String params = buildParam(filePath);
         //System.out.println("params=>"+params);
         out.write(params.getBytes());
         out.flush();
@@ -117,7 +115,7 @@ public class TrainOcrApi{
      * 替换部分值
      * @return 参数字符串
      */
-    private String  buildParam() throws Exception{
+    private String  buildParam(String filePath) throws Exception{
         String param = "{"+
                 "    \"header\": {"+
                 "        \"app_id\": \""+appid+"\","+
@@ -136,7 +134,7 @@ public class TrainOcrApi{
                 "    \"payload\": {"+
                 "        \"s19cfe728_data_1\": {"+
                 "            \"encoding\": \"jpg\","+
-                "            \"image\": \""+Base64.getEncoder().encodeToString(read(imagePath))+"\","+
+                "            \"image\": \""+Base64.getEncoder().encodeToString(read(filePath))+"\","+
                 "            \"status\": 3"+
                 "        }"+
                 "    }"+
@@ -190,8 +188,8 @@ public class TrainOcrApi{
     }
 
 
-    public JsonResult doRequest() throws Exception {
-        String resp = httpRequest();
+    public JsonResult doRequest(String filePath) throws Exception {
+        String resp = httpRequest(filePath);
         JsonParse myJsonParse = json.fromJson(resp, JsonParse.class);
         String textBase64Decode=new String(Base64.getDecoder().decode(myJsonParse.payload.result.text), "UTF-8");
         // 解析返回结果

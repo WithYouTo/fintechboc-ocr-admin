@@ -3,9 +3,7 @@ package com.cindy.ocrdemo.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cindy.ocrdemo.api.TaxiOcrApi;
-import com.cindy.ocrdemo.dto.JsonResult;
-import com.cindy.ocrdemo.dto.Region;
-import com.cindy.ocrdemo.dto.TextBlock;
+import com.cindy.ocrdemo.dto.*;
 import com.cindy.ocrdemo.mapper.InvoiceMapper;
 import com.cindy.ocrdemo.pojo.Invoice;
 import com.cindy.ocrdemo.pojo.InvoiceDetail;
@@ -39,11 +37,11 @@ public class TaxiDetailServiceImpl extends ServiceImpl<TaxiDetailMapper, TaxiDet
     private TaxiDetailMapper taxiDetailMapper;
 
     @Override
-    public void saveTaxiByApi() throws Exception {
-        JsonResult jsonResult = taxiOcrApi.doRequest();
+    public TaxiDetail saveTaxiByApi(FileUrlDto fileUrlDto) throws Exception {
+        JsonResult jsonResult = taxiOcrApi.doRequest(fileUrlDto.getLocalFileUrl());
         // 解析结果为空
         if(ObjectUtils.isEmpty(jsonResult)){
-            return;
+            return null;
         }
 
         List<Region> regionList = jsonResult.getObjectList().get(0).getRegionList();
@@ -51,13 +49,14 @@ public class TaxiDetailServiceImpl extends ServiceImpl<TaxiDetailMapper, TaxiDet
         Invoice invoice = new Invoice();
         TaxiDetail taxiDetail = new TaxiDetail();
 
-        invoice.setUserId(1L);
-        invoice.setUsername("曾欣");
+        invoice.setUserId(UserContext.getUserId());
+        invoice.setUsername(UserContext.getUser().getUsername());
         invoice.setApplyDate(new Date());
-        invoice.setImgPath("嘿嘿");
+        invoice.setLocalImgPath(fileUrlDto.getLocalFileUrl());
+        invoice.setNetImgPath(fileUrlDto.getNetFileUrl());
         invoice.setInvoiceType("taxi");
-        invoice.setNote("出租车测试数据");
-        invoiceMapper.insert(invoice);
+
+
 
         regionList.stream().forEach(i -> {
             List<TextBlock> textBlockList = i.getTextBlockList();
@@ -75,6 +74,8 @@ public class TaxiDetailServiceImpl extends ServiceImpl<TaxiDetailMapper, TaxiDet
             }else if(key.equals("Time")){
                 taxiDetail.setTaxiTime(val);
             }else if(key.equals("Number5_amount")){
+                // 发票总额
+                invoice.setInvoiceAmount(val);
                 taxiDetail.setAmount(val);
             }else if(key.equals("Number3_price")){
                 taxiDetail.setPrice(val);
@@ -82,7 +83,12 @@ public class TaxiDetailServiceImpl extends ServiceImpl<TaxiDetailMapper, TaxiDet
                 taxiDetail.setMileage(val);
             }
         });
+
+        invoiceMapper.insert(invoice);
+
+        taxiDetail.setInvoiceId(invoice.getId());
         taxiDetailMapper.insert(taxiDetail);
+        return taxiDetail;
     }
 }
 

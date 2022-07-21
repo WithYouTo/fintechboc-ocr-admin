@@ -1,11 +1,10 @@
 package com.cindy.ocrdemo.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.Data;
 
@@ -38,14 +37,14 @@ public class Invoice implements Serializable {
     private Date applyDate;
 
     /**
-     * 上传图片路径
+     * 上传网络图片路径
      */
-    private String imgPath;
+    private String netImgPath;
 
     /**
-     * 图片名称
+     * 上传本地图片路径
      */
-    private Integer imgName;
+    private String localImgPath;
 
     /**
      * 发票类型
@@ -55,12 +54,21 @@ public class Invoice implements Serializable {
     /**
      * 发票总额
      */
-    private BigDecimal invoiceAmount;
+    private String invoiceAmount;
 
     /**
      * 备注
      */
     private String note;
+
+    @TableField(fill = FieldFill.INSERT)
+    private String createEmp;
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+    @TableField(fill = FieldFill.UPDATE)
+    private String updateEmp;
+    @TableField(fill = FieldFill.UPDATE)
+    private LocalDateTime updateTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

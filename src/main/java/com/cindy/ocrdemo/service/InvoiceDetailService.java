@@ -1,7 +1,10 @@
 package com.cindy.ocrdemo.service;
 
+import com.cindy.ocrdemo.dto.FileUrlDto;
 import com.cindy.ocrdemo.pojo.InvoiceDetail;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.Map;
 
 /**
 * @author cindy
@@ -9,5 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-07-08 23:35:47
 */
 public interface InvoiceDetailService extends IService<InvoiceDetail> {
-    void saveInvoiceByApi() throws Exception;
+
+    InvoiceDetail saveInvoiceByApi(FileUrlDto fileUrlDto) throws Exception;
 }

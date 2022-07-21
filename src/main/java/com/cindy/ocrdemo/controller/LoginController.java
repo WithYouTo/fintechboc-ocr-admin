@@ -2,7 +2,9 @@ package com.cindy.ocrdemo.controller;
 
 import com.cindy.ocrdemo.anno.NoNeedLogin;
 import com.cindy.ocrdemo.common.CommonResult;
+import com.cindy.ocrdemo.dto.UserContext;
 import com.cindy.ocrdemo.dto.UserLoginFormDTO;
+import com.cindy.ocrdemo.dto.UserReturnDTO;
 import com.cindy.ocrdemo.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +25,9 @@ public class LoginController {
     }
 
     @GetMapping("/info")
-    public CommonResult getUserInfo(HttpServletRequest req){
-        return userService.getUserInfo(req.getHeader("token"));
+    public CommonResult getUserInfo(){
+        UserReturnDTO userReturnDTO = userService.getUserInfo(UserContext.getUser().getToken());
+        return CommonResult.success(userReturnDTO);
     }
 
     @PostMapping("/add")
@@ -39,7 +42,9 @@ public class LoginController {
     }
 
     @PostMapping("/logout")
-    public CommonResult logout(HttpServletRequest req){
+    public CommonResult logout(){
+        // 删除用户信息
+        UserContext.remove();
         return CommonResult.success("退出成功");
     }
 }

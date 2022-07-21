@@ -1,5 +1,6 @@
 package com.cindy.ocrdemo.service;
 
+import com.cindy.ocrdemo.dto.FileUrlDto;
 import com.cindy.ocrdemo.pojo.TrainDetail;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -9,5 +10,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-07-08 21:28:16
 */
 public interface TrainDetailService extends IService<TrainDetail> {
-    void saveTrainByApi() throws Exception;
+    TrainDetail saveTrainByApi(FileUrlDto fileUrlDto) throws Exception;
 }

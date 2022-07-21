@@ -2,6 +2,7 @@ package com.cindy.ocrdemo.service;
 
 import com.cindy.ocrdemo.common.CommonResult;
 import com.cindy.ocrdemo.dto.UserLoginFormDTO;
+import com.cindy.ocrdemo.dto.UserReturnDTO;
 import com.cindy.ocrdemo.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,7 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface UserService extends IService<User> {
     CommonResult login(UserLoginFormDTO userLoginFormDTO);
 
-    CommonResult getUserInfo(String  token);
+    UserReturnDTO getUserInfo(String  token);
 
     void addUser(UserLoginFormDTO userLoginFormDTO);
 }

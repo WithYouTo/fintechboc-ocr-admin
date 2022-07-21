@@ -3,9 +3,7 @@ package com.cindy.ocrdemo.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cindy.ocrdemo.api.TrainOcrApi;
-import com.cindy.ocrdemo.dto.JsonResult;
-import com.cindy.ocrdemo.dto.Region;
-import com.cindy.ocrdemo.dto.TextBlock;
+import com.cindy.ocrdemo.dto.*;
 import com.cindy.ocrdemo.mapper.InvoiceMapper;
 import com.cindy.ocrdemo.pojo.Invoice;
 import com.cindy.ocrdemo.pojo.TrainDetail;
@@ -36,11 +34,11 @@ public class TrainDetailServiceImpl extends ServiceImpl<TrainDetailMapper, Train
         private TrainDetailMapper trainDetailMapper;
 
         @Override
-        public void saveTrainByApi() throws Exception {
-            JsonResult jsonResult = trainOcrApi.doRequest();
+        public TrainDetail saveTrainByApi(FileUrlDto fileUrlDto) throws Exception {
+            JsonResult jsonResult = trainOcrApi.doRequest(fileUrlDto.getLocalFileUrl());
             // 解析结果为空
             if(ObjectUtils.isEmpty(jsonResult)){
-                return;
+                return null;
             }
 
             List<Region> regionList = jsonResult.getObjectList().get(0).getRegionList();
@@ -48,13 +46,12 @@ public class TrainDetailServiceImpl extends ServiceImpl<TrainDetailMapper, Train
             Invoice invoice = new Invoice();
             TrainDetail trainDetail = new TrainDetail();
 
-            invoice.setUserId(1L);
-            invoice.setUsername("曾欣");
+            invoice.setUserId(UserContext.getUserId());
+            invoice.setUsername(UserContext.getUser().getUsername());
             invoice.setApplyDate(new Date());
-            invoice.setImgPath("火车票");
-            invoice.setInvoiceType("traIn");
-            invoice.setNote("火车票测试数据");
-            invoiceMapper.insert(invoice);
+            invoice.setLocalImgPath(fileUrlDto.getLocalFileUrl());
+            invoice.setNetImgPath(fileUrlDto.getNetFileUrl());
+            invoice.setInvoiceType("train");
 
             regionList.stream().forEach(i -> {
                 List<TextBlock> textBlockList = i.getTextBlockList();
@@ -81,12 +78,18 @@ public class TrainDetailServiceImpl extends ServiceImpl<TrainDetailMapper, Train
                 }else if(key.equals("identity")){
                     trainDetail.setIdentity(val);
                 }else if(key.equals("Number3-Amount")){
+                    // 发票总额
+                    invoice.setInvoiceAmount(val);
                     trainDetail.setAmount(val);
                 }else if(key.equals("Seat-type")){
                     trainDetail.setSeatType(val);
                 }
             });
+
+            invoiceMapper.insert(invoice);
+            trainDetail.setInvoiceId(invoice.getId());
             trainDetailMapper.insert(trainDetail);
+            return trainDetail;
         }
 }
 

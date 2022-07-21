@@ -36,7 +36,7 @@ public class InvoiceOcrApi {
     @Value("${iflytek.appid}")
     private  String apiId;
 
-    private  String imagePath = "F:\\data\\invoice_image-02.jpg";
+//    private  String imagePath = "F:\\data\\invoice_image-02.jpg";
 
     //解析Json
     private static Gson json = new Gson();
@@ -200,9 +200,9 @@ public class InvoiceOcrApi {
         }
     }
 
-    public  JsonResult doRequest() throws Exception {
+    public  JsonResult doRequest(String filePath) throws Exception {
         JsonResult parse = new JsonResult();
-        ResponseData respData = imageContrast(imagePath);
+        ResponseData respData = imageContrast(filePath);
         if (respData.getPayLoad().getResult() != null) {
             String textBase64 = respData.getPayLoad().getResult().getText();
             String text = new String(Base64.getDecoder().decode(textBase64));

@@ -1,10 +1,10 @@
 package com.cindy.ocrdemo.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import lombok.Data;
 
 /**
@@ -19,6 +19,11 @@ public class InvoiceDetail implements Serializable {
      */
     @TableId(type = IdType.AUTO)
     private Long detailId;
+
+    /**
+     * 关联主表中的主键
+     */
+    private Long invoiceId;
 
     /**
      * 购货方名称
@@ -129,6 +134,15 @@ public class InvoiceDetail implements Serializable {
      * 备注
      */
     private String note;
+
+    @TableField(fill = FieldFill.INSERT)
+    private String createEmp;
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+    @TableField(fill = FieldFill.UPDATE)
+    private String updateEmp;
+    @TableField(fill = FieldFill.UPDATE)
+    private LocalDateTime updateTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

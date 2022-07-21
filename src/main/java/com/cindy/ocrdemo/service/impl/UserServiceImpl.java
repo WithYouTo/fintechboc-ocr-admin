@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cindy.ocrdemo.common.CommonResult;
 import com.cindy.ocrdemo.common.ResultCode;
+import com.cindy.ocrdemo.dto.UserContext;
 import com.cindy.ocrdemo.dto.UserLoginFormDTO;
 import com.cindy.ocrdemo.dto.UserReturnDTO;
 import com.cindy.ocrdemo.pojo.User;
@@ -67,14 +68,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public CommonResult getUserInfo(String token) {
+    public UserReturnDTO getUserInfo(String token) {
         Long userId = JwtUtil.getUserIdTokenInfo(token);
         User user = userMapper.selectById(userId);
         UserReturnDTO userReturnDTO = new UserReturnDTO();
         userReturnDTO.setUserId(user.getUserId());
         userReturnDTO.setUsername(user.getUsername());
         userReturnDTO.setToken(token);
-        return CommonResult.success(userReturnDTO);
+        return userReturnDTO;
     }
 
     @Override
@@ -87,6 +88,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUsername(userLoginFormDTO.getUsername());
         user.setPassword(digestPsw);
         user.setSalt("$1$BOC-FINTECH-SALT");
+        user.setUserId(UserContext.getUserId());
         user.setCreateTime(LocalDateTime.now());
         userMapper.insert(user);
     }

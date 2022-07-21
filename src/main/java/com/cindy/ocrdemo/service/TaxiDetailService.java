@@ -1,5 +1,6 @@
 package com.cindy.ocrdemo.service;
 
+import com.cindy.ocrdemo.dto.FileUrlDto;
 import com.cindy.ocrdemo.pojo.TaxiDetail;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -9,5 +10,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-07-08 21:28:09
 */
 public interface TaxiDetailService extends IService<TaxiDetail> {
-    void saveTaxiByApi() throws Exception;
+    TaxiDetail saveTaxiByApi(FileUrlDto fileUrlDto) throws Exception;
 }
