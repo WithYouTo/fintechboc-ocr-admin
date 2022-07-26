@@ -59,10 +59,6 @@ public class Invoice implements Serializable {
      */
     private String invoiceAmount;
 
-    /**
-     * 备注
-     */
-    private String note;
 
     /**
      * 审核人
@@ -78,6 +74,11 @@ public class Invoice implements Serializable {
      * 状态，0表示待审核，1表示审核通过，2表示审核待修改
      */
     private Integer status;
+
+    /**
+     * 备注
+     */
+    private String auditNote;
 
     /**
      * 逻辑删除标志

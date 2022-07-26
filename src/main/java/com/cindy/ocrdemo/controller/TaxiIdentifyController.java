@@ -6,7 +6,6 @@ import com.cindy.ocrdemo.dto.FileUrlDto;
 import com.cindy.ocrdemo.dto.TaxiIdentifyDto;
 import com.cindy.ocrdemo.pojo.TaxiDetail;
 import com.cindy.ocrdemo.service.TaxiDetailService;
-import com.cindy.ocrdemo.service.TaxiDetailService;
 import com.cindy.ocrdemo.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

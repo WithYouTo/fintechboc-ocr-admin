@@ -30,4 +30,4 @@ mybatis-plus:
 web:
   upload-path: D:/data/
 server:
-  port: 8065
+  port: 8060

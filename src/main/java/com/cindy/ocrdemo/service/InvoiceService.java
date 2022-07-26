@@ -1,5 +1,7 @@
 package com.cindy.ocrdemo.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cindy.ocrdemo.dto.PageDto;
@@ -15,6 +17,6 @@ import java.awt.print.Book;
 */
 public interface InvoiceService extends IService<Invoice> {
 
-    IPage<Invoice> listUserByPage(Page<Invoice> page, PageDto pageDto) ;
+    IPage<Invoice> listUserByPage(Page<Invoice> page, LambdaQueryWrapper<Invoice> queryWrapper) ;
 
 }

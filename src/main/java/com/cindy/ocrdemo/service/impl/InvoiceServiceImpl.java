@@ -1,6 +1,7 @@
 package com.cindy.ocrdemo.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,9 +29,10 @@ public class InvoiceServiceImpl extends ServiceImpl<InvoiceMapper, Invoice>
     private InvoiceMapper invoiceMapper;
 
     @Override
-    public IPage<Invoice> listUserByPage(Page<Invoice> page, PageDto pageDto) {
-        QueryWrapper<Invoice> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("create_time");
+    public IPage<Invoice> listUserByPage(Page<Invoice> page, LambdaQueryWrapper<Invoice> queryWrapper) {
+        // 创建时间降序， 状态升序
+//        queryWrapper.orderByDesc(Invoice::getCreateTime);
+//        queryWrapper.orderByAsc(Invoice::getStatus);
         return invoiceMapper.selectPage(page, queryWrapper);
     }
 }
