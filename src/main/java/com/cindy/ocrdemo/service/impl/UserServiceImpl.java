@@ -1,10 +1,6 @@
 package com.cindy.ocrdemo.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.asymmetric.Sign;
-import cn.hutool.crypto.asymmetric.SignAlgorithm;
-import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cindy.ocrdemo.common.CommonResult;
@@ -17,6 +13,7 @@ import com.cindy.ocrdemo.service.UserService;
 import com.cindy.ocrdemo.mapper.UserMapper;
 import com.cindy.ocrdemo.util.EncryptUtil;
 import com.cindy.ocrdemo.util.JwtUtil;
+
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,7 +36,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         String username = userLoginFormDTO.getUsername();
         String password = userLoginFormDTO.getPassword();
-        // 参数校验
+        // 参数校验，用户名或密码为空
         if(StrUtil.isEmpty(username) || StrUtil.isEmpty(password)){
             return CommonResult.failed(ResultCode.VALIDATE_FAILED);
         }
@@ -47,6 +44,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUsername, username);
         User user = userMapper.selectOne(queryWrapper);
+        
+        /*
         if(user == null){
             return CommonResult.failed(ResultCode.RES_NULL);
         }
@@ -56,13 +55,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             // 密码不正确
             return CommonResult.failed(ResultCode.VALIDATE_FAILED);
         }
+        */
+
+		// 第一个参数为原始未加密的密码明文，第二个参数为数据库存储的密码hash值
+        boolean match = EncryptUtil.matchPassword(password, user.getPassword());
+        // 用户名或密码不正确
+        if(user == null || !match){
+        	return CommonResult.failed(ResultCode.USERID_PASSWORD_ERROR);
+        }
+		
+        
+        
         // 生成token
         String token = JwtUtil.createToken(user);
         // 返回页面数据
         UserReturnDTO userReturnDTO = new UserReturnDTO();
         userReturnDTO.setUserId(user.getUserId());
         userReturnDTO.setUsername(user.getUsername());
-        userReturnDTO.setRole("超级管理员");
+      	userReturnDTO.setRole(userMapper.getRole(username));
         userReturnDTO.setToken(token);
         return CommonResult.success(userReturnDTO);
     }
@@ -83,11 +93,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 创建用户
         String password = userLoginFormDTO.getPassword();
         // 密码加密
-       String digestPsw = EncryptUtil.encryptPassword(password);
+        String digestPsw = EncryptUtil.encryptPassword(password);
         User user = new User();
         user.setUsername(userLoginFormDTO.getUsername());
         user.setPassword(digestPsw);
-        user.setSalt("$1$BOC-FINTECH-SALT");
+        //user.setSalt("$1$BOC-FINTECH-SALT");
         user.setUserId(UserContext.getUserId());
         user.setCreateTime(LocalDateTime.now());
         userMapper.insert(user);
