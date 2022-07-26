@@ -3,6 +3,7 @@ package com.cindy.ocrdemo.controller;
 import cn.hutool.core.util.ObjectUtil;
 import com.cindy.ocrdemo.common.CommonResult;
 import com.cindy.ocrdemo.dto.FileUrlDto;
+import com.cindy.ocrdemo.dto.TaxiIdentifyDto;
 import com.cindy.ocrdemo.pojo.TaxiDetail;
 import com.cindy.ocrdemo.service.TaxiDetailService;
 import com.cindy.ocrdemo.service.TaxiDetailService;
@@ -41,11 +42,12 @@ public class TaxiIdentifyController {
             FileUrlDto fileUrlDto = new FileUrlDto();
             fileUrlDto.setNetFileUrl(netFileUrl);
             fileUrlDto.setLocalFileUrl(localFileUrl);
-            TaxiDetail trainDetail = taxiDetailService.saveTaxiByApi(fileUrlDto);
-            if(trainDetail == null || ObjectUtil.isAllEmpty(trainDetail)){
+            TaxiIdentifyDto taxiIdentifyDto = taxiDetailService.saveTaxiByApi(fileUrlDto);
+
+            if(taxiIdentifyDto.getTaxiDetail() == null || ObjectUtil.isAllEmpty(taxiIdentifyDto.getTaxiDetail() )){
                 return CommonResult.failed("未识别出租车任何数据，请稍后重试");
             }else{
-                return CommonResult.success(trainDetail);
+                return CommonResult.success(taxiIdentifyDto);
             }
         }catch (Exception e){
            log.error("识别出租车信息失败，失败原因{}", e.getMessage());

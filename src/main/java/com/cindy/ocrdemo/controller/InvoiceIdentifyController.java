@@ -3,6 +3,7 @@ package com.cindy.ocrdemo.controller;
 import cn.hutool.core.util.ObjectUtil;
 import com.cindy.ocrdemo.common.CommonResult;
 import com.cindy.ocrdemo.dto.FileUrlDto;
+import com.cindy.ocrdemo.dto.InvoiceIdentifyDto;
 import com.cindy.ocrdemo.pojo.InvoiceDetail;
 import com.cindy.ocrdemo.service.InvoiceDetailService;
 import com.cindy.ocrdemo.util.FileUtil;
@@ -40,11 +41,11 @@ public class InvoiceIdentifyController {
             FileUrlDto fileUrlDto = new FileUrlDto();
             fileUrlDto.setNetFileUrl(netFileUrl);
             fileUrlDto.setLocalFileUrl(localFileUrl);
-            InvoiceDetail invoiceDetail = invoiceDetailService.saveInvoiceByApi(fileUrlDto);
-            if(invoiceDetail == null || ObjectUtil.isAllEmpty(invoiceDetail)){
+            InvoiceIdentifyDto invoiceIdentifyDto = invoiceDetailService.saveInvoiceByApi(fileUrlDto);
+            if(invoiceIdentifyDto.getInvoiceDetail() == null || ObjectUtil.isAllEmpty(invoiceIdentifyDto.getInvoiceDetail())){
                 return CommonResult.failed("未识别数据，请稍后重试");
             }else{
-                return CommonResult.success(invoiceDetail);
+                return CommonResult.success(invoiceIdentifyDto);
             }
         }catch (Exception e){
            log.error("识别图片失败，失败原因{}", e.getMessage());

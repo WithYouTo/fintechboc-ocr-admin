@@ -1,7 +1,5 @@
 package com.cindy.ocrdemo.util;
 
-import com.cindy.ocrdemo.dto.FileUrlDto;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 

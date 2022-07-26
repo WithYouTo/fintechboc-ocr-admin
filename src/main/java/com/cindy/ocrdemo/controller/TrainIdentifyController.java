@@ -3,6 +3,7 @@ package com.cindy.ocrdemo.controller;
 import cn.hutool.core.util.ObjectUtil;
 import com.cindy.ocrdemo.common.CommonResult;
 import com.cindy.ocrdemo.dto.FileUrlDto;
+import com.cindy.ocrdemo.dto.TrainIdentifyDto;
 import com.cindy.ocrdemo.pojo.TrainDetail;
 import com.cindy.ocrdemo.service.TrainDetailService;
 import com.cindy.ocrdemo.service.TrainDetailService;
@@ -41,11 +42,11 @@ public class TrainIdentifyController {
             FileUrlDto fileUrlDto = new FileUrlDto();
             fileUrlDto.setNetFileUrl(netFileUrl);
             fileUrlDto.setLocalFileUrl(localFileUrl);
-            TrainDetail trainDetail = trainDetailService.saveTrainByApi(fileUrlDto);
-            if(trainDetail == null || ObjectUtil.isAllEmpty(trainDetail)){
+            TrainIdentifyDto trainIdentifyDto = trainDetailService.saveTrainByApi(fileUrlDto);
+            if(trainIdentifyDto.getTrainDetail() == null || ObjectUtil.isAllEmpty(trainIdentifyDto.getTrainDetail())){
                 return CommonResult.failed("未识别火车票任何数据，请稍后重试");
             }else{
-                return CommonResult.success(trainDetail);
+                return CommonResult.success(trainIdentifyDto);
             }
         }catch (Exception e){
            log.error("识别火车票信息失败，失败原因{}", e.getMessage());

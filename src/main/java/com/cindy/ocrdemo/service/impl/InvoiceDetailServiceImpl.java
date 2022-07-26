@@ -43,7 +43,7 @@ public class InvoiceDetailServiceImpl extends ServiceImpl<InvoiceDetailMapper, I
     private InvoiceOcrApi invoiceOcrApi;
 
     @Override
-    public InvoiceDetail saveInvoiceByApi(FileUrlDto fileUrlDto) throws Exception {
+    public InvoiceIdentifyDto saveInvoiceByApi(FileUrlDto fileUrlDto) throws Exception {
 //        无法获取到配置文件中的值 , @component 将它声明为ioc容器可托管， 通过依赖注入，否则无法获取到值
 //        InvoiceOcrApi invoiceOcrApi = new InvoiceOcrApi();
         JsonResult jsonResult = invoiceOcrApi.doRequest(fileUrlDto.getLocalFileUrl());
@@ -117,7 +117,11 @@ public class InvoiceDetailServiceImpl extends ServiceImpl<InvoiceDetailMapper, I
         invoiceMapper.insert(invoice);
         invoiceDetail.setInvoiceId(invoice.getId());
         invoiceDetailMapper.insert(invoiceDetail);
-        return invoiceDetail;
+
+        InvoiceIdentifyDto invoiceIdentifyDto = new InvoiceIdentifyDto();
+        invoiceIdentifyDto.setInvoice(invoice);
+        invoiceIdentifyDto.setInvoiceDetail(invoiceDetail);
+        return invoiceIdentifyDto;
     }
 }
 

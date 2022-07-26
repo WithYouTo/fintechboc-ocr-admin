@@ -34,7 +34,7 @@ public class TrainDetailServiceImpl extends ServiceImpl<TrainDetailMapper, Train
         private TrainDetailMapper trainDetailMapper;
 
         @Override
-        public TrainDetail saveTrainByApi(FileUrlDto fileUrlDto) throws Exception {
+        public TrainIdentifyDto saveTrainByApi(FileUrlDto fileUrlDto) throws Exception {
             JsonResult jsonResult = trainOcrApi.doRequest(fileUrlDto.getLocalFileUrl());
             // 解析结果为空
             if(ObjectUtils.isEmpty(jsonResult)){
@@ -89,7 +89,11 @@ public class TrainDetailServiceImpl extends ServiceImpl<TrainDetailMapper, Train
             invoiceMapper.insert(invoice);
             trainDetail.setInvoiceId(invoice.getId());
             trainDetailMapper.insert(trainDetail);
-            return trainDetail;
+
+            TrainIdentifyDto trainIdentifyDto = new TrainIdentifyDto();
+            trainIdentifyDto.setInvoice(invoice);
+            trainIdentifyDto.setTrainDetail(trainDetail);
+            return trainIdentifyDto;
         }
 }
 

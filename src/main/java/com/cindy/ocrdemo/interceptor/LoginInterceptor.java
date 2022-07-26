@@ -1,5 +1,6 @@
 package com.cindy.ocrdemo.interceptor;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.cindy.ocrdemo.anno.NoNeedLogin;
 import com.cindy.ocrdemo.common.CommonResult;
@@ -36,11 +37,19 @@ public class LoginInterceptor implements HandlerInterceptor {
         //跨域设置
         this.crossDomainConfig(response);
 
+        // 静态资源直接放行
+        String req = request.getRequestURI();
+        if(req.contains("jpg") || req.contains("jpeg") || req.contains("png")){
+            return true;
+        }
+
         //不需要登录的注解
         Boolean isNoNeedLogin = ((HandlerMethod) handler).getMethodAnnotation(NoNeedLogin.class) != null;
         if (isNoNeedLogin) {
             return true;
         }
+
+
 
         //需要做token校验, 消息头的token优先于请求query参数的token
         String xHeaderToken = request.getHeader(TOKEN_NAME);

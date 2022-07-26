@@ -1,10 +1,19 @@
 package com.cindy.ocrdemo.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cindy.ocrdemo.dto.PageDto;
 import com.cindy.ocrdemo.pojo.Invoice;
 import com.cindy.ocrdemo.service.InvoiceService;
 import com.cindy.ocrdemo.mapper.InvoiceMapper;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.awt.print.Book;
+import java.util.Arrays;
 
 /**
 * @author cindy
@@ -15,6 +24,15 @@ import org.springframework.stereotype.Service;
 public class InvoiceServiceImpl extends ServiceImpl<InvoiceMapper, Invoice>
     implements InvoiceService{
 
+    @Resource
+    private InvoiceMapper invoiceMapper;
+
+    @Override
+    public IPage<Invoice> listUserByPage(Page<Invoice> page, PageDto pageDto) {
+        QueryWrapper<Invoice> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("create_time");
+        return invoiceMapper.selectPage(page, queryWrapper);
+    }
 }
 
 

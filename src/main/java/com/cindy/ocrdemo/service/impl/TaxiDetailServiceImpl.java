@@ -37,7 +37,7 @@ public class TaxiDetailServiceImpl extends ServiceImpl<TaxiDetailMapper, TaxiDet
     private TaxiDetailMapper taxiDetailMapper;
 
     @Override
-    public TaxiDetail saveTaxiByApi(FileUrlDto fileUrlDto) throws Exception {
+    public TaxiIdentifyDto saveTaxiByApi(FileUrlDto fileUrlDto) throws Exception {
         JsonResult jsonResult = taxiOcrApi.doRequest(fileUrlDto.getLocalFileUrl());
         // 解析结果为空
         if(ObjectUtils.isEmpty(jsonResult)){
@@ -88,7 +88,12 @@ public class TaxiDetailServiceImpl extends ServiceImpl<TaxiDetailMapper, TaxiDet
 
         taxiDetail.setInvoiceId(invoice.getId());
         taxiDetailMapper.insert(taxiDetail);
-        return taxiDetail;
+
+        // 返回頁面結果
+        TaxiIdentifyDto taxiIdentifyDto = new TaxiIdentifyDto();
+        taxiIdentifyDto.setInvoice(invoice);
+        taxiIdentifyDto.setTaxiDetail(taxiDetail);
+        return taxiIdentifyDto;
     }
 }
 

@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -34,6 +36,7 @@ public class Invoice implements Serializable {
     /**
      * 申请日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone="GMT+8")
     private Date applyDate;
 
     /**
@@ -60,6 +63,27 @@ public class Invoice implements Serializable {
      * 备注
      */
     private String note;
+
+    /**
+     * 审核人
+     */
+    private Long auditId;
+
+    /**
+     * 审核时间
+     */
+    private LocalDateTime auditTime;
+
+    /**
+     * 状态，0表示待审核，1表示审核通过，2表示审核待修改
+     */
+    private Integer status;
+
+    /**
+     * 逻辑删除标志
+     */
+    @TableLogic
+    private Integer deleteFlag;
 
     @TableField(fill = FieldFill.INSERT)
     private String createEmp;
