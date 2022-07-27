@@ -1,10 +1,13 @@
 package com.cindy.ocrdemo.controller;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cindy.ocrdemo.common.CommonResult;
 import com.cindy.ocrdemo.dto.FileUrlDto;
 import com.cindy.ocrdemo.dto.TaxiIdentifyDto;
+import com.cindy.ocrdemo.pojo.Invoice;
 import com.cindy.ocrdemo.pojo.TaxiDetail;
+import com.cindy.ocrdemo.service.InvoiceService;
 import com.cindy.ocrdemo.service.TaxiDetailService;
 import com.cindy.ocrdemo.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,9 @@ public class TaxiIdentifyController {
     // 绑定文件上传路径到uploadPath
     @Value("${web.upload-path}")
     private String uploadPath;
+
+    @Resource
+    private InvoiceService invoiceService;
 
     @Resource
     private TaxiDetailService taxiDetailService;
@@ -55,8 +61,19 @@ public class TaxiIdentifyController {
     }
 
     @PostMapping("/save")
-    public CommonResult saveTaxiResult(@RequestBody TaxiDetail trainDetail){
-        taxiDetailService.updateById(trainDetail);
+    public CommonResult saveTaxiResult(@RequestBody TaxiDetail taxiDetail){
+        // 判断当前申请单状态
+        Invoice invoice = invoiceService.getOne(new LambdaQueryWrapper<Invoice>().eq(Invoice::getId, taxiDetail.getInvoiceId()));
+        if(invoice == null){
+            return CommonResult.failed("没有查询到申请记录");
+        }
+        // 判断当前申请单状态是否是待修改
+        if(invoice.getStatus() == 2){
+            // 状态更新为待提交
+            invoice.setStatus(0);
+            invoiceService.updateById(invoice);
+        }
+        taxiDetailService.updateById(taxiDetail);
         return CommonResult.success("保存成功");
     }
 

@@ -6,9 +6,9 @@ import com.cindy.ocrdemo.util.FileUtil;
 import com.cindy.ocrdemo.util.HttpUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
+@Slf4j
 public class InvoiceOcrApi {
     @Value("${iflytek.requestInvoiceUrl}")
     private  String requestUrl;
@@ -121,9 +122,10 @@ public class InvoiceOcrApi {
     private ResponseData handleImgContrastRes(String url, String bodyParam) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-type", "application/json");
+        headers.put("Charset", "utf-8");
         String result = HttpUtil.doPost2(url, headers, bodyParam);
         if (result != null) {
-            System.out.println("增值税发票识别接口调用结果：" + result);
+            log.info("result(base64位)转json结果为 {}", json.fromJson(result, ResponseData.class).toString());
             return json.fromJson(result, ResponseData.class);
         } else {
             return null;
@@ -205,7 +207,7 @@ public class InvoiceOcrApi {
         ResponseData respData = imageContrast(filePath);
         if (respData.getPayLoad().getResult() != null) {
             String textBase64 = respData.getPayLoad().getResult().getText();
-            String text = new String(Base64.getDecoder().decode(textBase64));
+            String text = new String(Base64.getDecoder().decode(textBase64), "UTF-8");
             // 解析返回结果
             parse = JSON.parseObject(text, (Type) JsonResult.class);
         }

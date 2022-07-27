@@ -1,11 +1,15 @@
 package com.cindy.ocrdemo.controller;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cindy.ocrdemo.common.CommonResult;
 import com.cindy.ocrdemo.dto.FileUrlDto;
 import com.cindy.ocrdemo.dto.InvoiceIdentifyDto;
+import com.cindy.ocrdemo.pojo.Invoice;
 import com.cindy.ocrdemo.pojo.InvoiceDetail;
 import com.cindy.ocrdemo.service.InvoiceDetailService;
+import com.cindy.ocrdemo.service.InvoiceService;
 import com.cindy.ocrdemo.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +30,9 @@ public class InvoiceIdentifyController {
     // 绑定文件上传路径到uploadPath
     @Value("${web.upload-path}")
     private String uploadPath;
+
+    @Resource
+    private InvoiceService invoiceService;
 
     @Resource
     private InvoiceDetailService invoiceDetailService;
@@ -55,6 +62,17 @@ public class InvoiceIdentifyController {
 
     @PostMapping("/save")
     public CommonResult saveInvoiceResult(@RequestBody InvoiceDetail invoiceDetail){
+        // 判断当前申请单状态
+        Invoice invoice = invoiceService.getOne(new LambdaQueryWrapper<Invoice>().eq(Invoice::getId, invoiceDetail.getInvoiceId()));
+        if(invoice == null){
+            return CommonResult.failed("没有查询到申请记录");
+        }
+        // 判断当前申请单状态是否是待修改
+        if(invoice.getStatus() == 2){
+            // 状态更新为待提交
+            invoice.setStatus(0);
+            invoiceService.updateById(invoice);
+        }
         invoiceDetailService.updateById(invoiceDetail);
         return CommonResult.success("保存成功");
     }
