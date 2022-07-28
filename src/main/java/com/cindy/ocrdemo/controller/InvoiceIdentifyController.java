@@ -2,7 +2,6 @@ package com.cindy.ocrdemo.controller;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cindy.ocrdemo.common.CommonResult;
 import com.cindy.ocrdemo.dto.FileUrlDto;
 import com.cindy.ocrdemo.dto.InvoiceIdentifyDto;
@@ -61,6 +60,7 @@ public class InvoiceIdentifyController {
     }
 
     @PostMapping("/save")
+
     public CommonResult saveInvoiceResult(@RequestBody InvoiceDetail invoiceDetail){
         // 判断当前申请单状态
         Invoice invoice = invoiceService.getOne(new LambdaQueryWrapper<Invoice>().eq(Invoice::getId, invoiceDetail.getInvoiceId()));
@@ -69,11 +69,17 @@ public class InvoiceIdentifyController {
         }
         // 判断当前申请单状态是否是待修改
         if(invoice.getStatus() == 2){
+            invoiceService.insertOperateLog(invoice.getId(), 0);
             // 状态更新为待提交
             invoice.setStatus(0);
-            invoiceService.updateById(invoice);
         }
+        // 如果修改小写的价税合计，需要更新主表的价格
+        if(invoice.getInvoiceAmount() != invoiceDetail.getInvoiceTotalCoverTaxDigits()){
+            invoice.setInvoiceAmount(invoiceDetail.getInvoiceTotalCoverTaxDigits());
+        }
+        invoiceService.updateById(invoice);
         invoiceDetailService.updateById(invoiceDetail);
+
         return CommonResult.success("保存成功");
     }
 

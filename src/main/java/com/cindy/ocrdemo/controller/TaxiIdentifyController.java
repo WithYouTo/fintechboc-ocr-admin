@@ -69,10 +69,15 @@ public class TaxiIdentifyController {
         }
         // 判断当前申请单状态是否是待修改
         if(invoice.getStatus() == 2){
+            invoiceService.insertOperateLog(invoice.getId(), 0);
             // 状态更新为待提交
             invoice.setStatus(0);
-            invoiceService.updateById(invoice);
         }
+        // 如果修改小写的价税合计，需要更新主表的价格
+        if(invoice.getInvoiceAmount() != taxiDetail.getAmount()){
+            invoice.setInvoiceAmount(taxiDetail.getAmount());
+        }
+        invoiceService.updateById(invoice);
         taxiDetailService.updateById(taxiDetail);
         return CommonResult.success("保存成功");
     }

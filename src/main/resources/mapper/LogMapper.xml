@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cindy.ocrdemo.mapper.LogMapper">
+
+    <resultMap id="BaseResultMap" type="com.cindy.ocrdemo.pojo.Log">
+            <id property="logId" column="log_id" jdbcType="BIGINT"/>
+            <result property="operateContent" column="operate_content" jdbcType="VARCHAR"/>
+            <result property="createEmp" column="create_emp" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        log_id,operate_content,create_emp,
+        create_time
+    </sql>
+</mapper>

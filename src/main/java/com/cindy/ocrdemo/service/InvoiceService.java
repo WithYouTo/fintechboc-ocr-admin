@@ -19,4 +19,7 @@ public interface InvoiceService extends IService<Invoice> {
 
     IPage<Invoice> listUserByPage(Page<Invoice> page, LambdaQueryWrapper<Invoice> queryWrapper) ;
 
+
+    void insertOperateLog(Long invoiceId, Integer status);
+
 }

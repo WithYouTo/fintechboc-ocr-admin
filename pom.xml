@@ -109,6 +109,13 @@
             <artifactId>spring-security-core</artifactId>
             <version>5.4.2</version>
         </dependency>
+
+        <!--aop 切面-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

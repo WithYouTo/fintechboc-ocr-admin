@@ -3,6 +3,7 @@ package com.cindy.ocrdemo.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cindy.ocrdemo.anno.OperationLog;
 import com.cindy.ocrdemo.common.CommonResult;
 import com.cindy.ocrdemo.dto.AuditCheckDto;
 import com.cindy.ocrdemo.dto.PageDto;
@@ -61,6 +62,7 @@ public class MyAuditController {
      * @return
      */
     @PostMapping("/check")
+    @OperationLog()
     public CommonResult updateById(@RequestBody AuditCheckDto auditCheckDto) {
         Invoice invoice = invoiceService.getById(auditCheckDto.getInvoiceId());
         if(invoice == null){
