@@ -85,6 +85,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         userReturnDTO.setUserId(user.getUserId());
         userReturnDTO.setUsername(user.getUsername());
         userReturnDTO.setToken(token);
+        userReturnDTO.setRole(userMapper.getRole(user.getUsername()));
         return userReturnDTO;
     }
 
